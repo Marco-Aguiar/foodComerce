@@ -8,18 +8,14 @@ import { SkeletonSnack } from './SkeletonSnack'
 
 import { Container } from './styles'
 
-interface SnacksProps {
-  snacks: SnackData[]
-}
-
-export function Snacks({ snacks }: SnacksProps) {
+export function Snacks({ snacks }: { snacks: SnackData[] }) {
   const { cart, addSnackIntoCart } = useCart()
 
   return (
     <Container>
-      {(snacks ?? []).length === 0
+      {(Array.isArray(snacks) && snacks.length === 0)
         ? [1, 2, 3, 4].map((n) => <SkeletonSnack key={n} />)
-        : snacks.map((snack) => {
+        : (Array.isArray(snacks) && snacks.map((snack) => {
             const snackExistent = cart.find(
               (item) => item.snack === snack.snack && item.id === snack.id,
             )
@@ -38,7 +34,7 @@ export function Snacks({ snacks }: SnacksProps) {
                 </div>
               </div>
             )
-          })}
+          }))}  
     </Container>
   )
 }
